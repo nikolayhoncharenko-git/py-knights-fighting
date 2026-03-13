@@ -89,19 +89,10 @@ KNIGHTS = {
 }
 
 
-def summon_knight(knight_base: list, name: str) -> Knight:
-    out_knight = None
-    for knight in knight_base:
-        if knight.name == name:
-            out_knight = knight
-
-    return out_knight
-
-
-def get_knight_base(base: dict) -> list:
-    out_list = []
+def get_knight_base(base: dict) -> dict:
+    out_list = {}
     for key, value in base.items():
-        out_list.append(Knight.get_knight(value))
+        out_list.update({key: Knight.get_knight(value)})
 
     return out_list
 
@@ -119,22 +110,15 @@ def fix_death(knight: Knight) -> None:
 def battle(knights_config: dict) -> dict:
     knights = get_knight_base(knights_config)
 
-    lancelot = summon_knight(knights, "Lancelot")
-    arthur = summon_knight(knights, "Arthur")
-    mordred = summon_knight(knights, "Mordred")
-    red_knight = summon_knight(knights, "Red Knight")
+    fight(knights["lancelot"], knights["mordred"])
+    fight(knights["arthur"], knights["red_knight"])
 
-    fight(lancelot, mordred)
-    fight(arthur, red_knight)
-
-    for knight in knights:
+    for knight in knights.values():
         fix_death(knight)
 
     return {
-        lancelot.name: lancelot.hp,
-        arthur.name: arthur.hp,
-        mordred.name: mordred.hp,
-        red_knight.name: red_knight.hp,
+        knight.name: knight.hp
+        for name, knight in knights.items()
     }
 
 
