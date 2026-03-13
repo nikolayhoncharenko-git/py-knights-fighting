@@ -110,8 +110,10 @@ def fix_death(knight: Knight) -> None:
 def battle(knights_config: dict) -> dict:
     knights = get_knight_base(knights_config)
 
-    fight(knights["lancelot"], knights["mordred"])
-    fight(knights["arthur"], knights["red_knight"])
+    battle_pairs = [("lancelot", "mordred"), ("arthur", "red_knight")]
+
+    for knight1_key, knight2_key in battle_pairs:
+        fight(knights[knight1_key], knights[knight2_key])
 
     for knight in knights.values():
         fix_death(knight)
@@ -120,6 +122,3 @@ def battle(knights_config: dict) -> dict:
         knight.name: knight.hp
         for name, knight in knights.items()
     }
-
-
-print(battle(KNIGHTS))
